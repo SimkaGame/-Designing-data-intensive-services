@@ -1,6 +1,19 @@
 # 1
 
--
+```mermaid
+graph TD
+    Locust["Клиент Locust"] -->|"HTTP (порт 8080)"| Nginx["Nginx (Proxy)"]
+    
+    Nginx --> App1["app1"]
+    Nginx --> App2["app2"]
+    Nginx --> App3["app3"]
+
+    subgraph FastAPI ["FastAPI экземпляры (порт 8000)"]
+        App1
+        App2
+        App3
+    end
+```
 
 # 2
 
