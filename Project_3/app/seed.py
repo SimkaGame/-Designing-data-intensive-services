@@ -10,8 +10,7 @@ from app.database import async_session_factory
 from app.models import User, Product, Order, OrderItem
 
 fake = Faker("ru_RU")
-random.seed(42)  # Воспроизводимость данных
-
+random.seed(42)
 
 CATEGORIES = ["Ноутбуки", "Смартфоны", "Наушники", "Клавиатуры", "Мыши", "Мониторы"]
 
@@ -57,9 +56,9 @@ async def seed_orders(
     products: list[tuple[int, Decimal]],
     count: int = 10000,
 ) -> None:
-    """Создаёт count заказов с 1-5 позициями каждый."""
+    """Создаёт count заказов с 1-5 позициями каждый с промежуточными коммитами."""
     statuses = ["pending", "paid", "shipped", "delivered", "cancelled"]
-    weights = [0.10, 0.40, 0.20, 0.25, 0.05]  # Распределение статусов
+    weights = [0.10, 0.40, 0.20, 0.25, 0.05]
 
     for i in range(count):
         user_id = random.choice(user_ids)
@@ -75,9 +74,8 @@ async def seed_orders(
             created_at=created_at,
         )
         session.add(order)
-        await session.flush()  # Получаем order.id
+        await session.flush()
 
-        # 1–5 позиций в заказе
         n_items = random.randint(1, 5)
         total = Decimal("0")
         chosen_products = random.sample(products, n_items)
@@ -95,17 +93,18 @@ async def seed_orders(
 
         order.total = total
 
+        # Промежуточный коммит каждые 1000 заказов для разгрузки оперативной памяти
         if (i + 1) % 1000 == 0:
+            await session.commit()
             print(f"  Создано заказов: {i + 1}/{count}")
 
 
 async def main():
     async with async_session_factory() as session:
-        # Проверка: не наполнена ли уже БД
         count = await session.scalar(select(func.count(User.id)))
         if count > 0:
             print(f"⚠️  В БД уже {count} пользователей. Пропускаем наполнение.")
-            print("   Для пересоздания: TRUNCATE users CASCADE;")
+            print("   Для пересоздания выполните: TRUNCATE users CASCADE;")
             return
 
         print("Создание пользователей...")

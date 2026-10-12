@@ -24,7 +24,6 @@ class User(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
-    # Связь: один пользователь — много заказов
     orders: Mapped[list["Order"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
@@ -87,7 +86,7 @@ class OrderItem(Base):
         BigInteger, ForeignKey("orders.id", ondelete="CASCADE"), nullable=False
     )
     product_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("products.id"), nullable=False
+        BigInteger, ForeignKey("products.id", ondelete="RESTRICT"), nullable=False
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
     unit_price: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
