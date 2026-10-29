@@ -34,7 +34,8 @@ graph TD
 Принудительно оставил контейнер ``` docker compose stop app2 docker ```
 
 На выводе видно, что 
-``` {"service":"highload-shop","instance":"b7bcb94d507f",...}
+``` 
+{"service":"highload-shop","instance":"b7bcb94d507f",...}
 {"service":"highload-shop","instance":"1807f6cfe862",...}
 {"service":"highload-shop","instance":"b7bcb94d507f",...} 
 ```

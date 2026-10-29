@@ -37,7 +37,7 @@ def run_locust_with_live_summary():
         bufsize=1,
     )
 
-    print("🚀 Тестирование запущено...")
+    print("Тестирование запущено...")
 
     if process.stdout:
         for line in process.stdout:
@@ -142,10 +142,7 @@ def print_summary(stats):
   ✓ Балансировка Nginx (Round-Robin между app1, app2, app3)
   ✓ Схема БД спроектирована (4 таблицы, индексы, constraints)
   ✓ SQLAlchemy 2.0 async engine + session factory
-  ✓ EXPLAIN ANALYZE показывает оптимизацию по индексам
-
-Следующий шаг: модуль 4 — кеширование и CDN
-============================================================"""
+  ✓ EXPLAIN ANALYZE показывает оптимизацию по индексам"""
     print(summary)
 
 
